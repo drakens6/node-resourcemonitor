@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Playground</title>
+</head>
+<body>
+<div class="container-fluid">
+    
+    <h2>Node Angular Sandbox</h2>
+    <button ng-click="getSandbox()" class="btn btn-success">Start</button>
+    <button ng-click="stopInt()" class="btn btn-danger">Stop</button>
+    
+</div>
+<div class="col-md-6">
+    <table class="table table-hover table-bordered">
+        <thead>
+        <th>CPU name</th>
+        <th>Speed</th>
+        <th>Idle</th>
+        <th>Sys</th>
+        <th>user</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="c in cores.cpu">
+            <td>{{c.model}}</td>
+            <td>{{c.speed || number}}</td>
+            <td>{{c.times.idle /1000| number:0}}</td>
+            <td>{{c.times.sys/1000 | number:0}}</td>
+            <td>{{c.times.user/1000 | number:0}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+    <div class="col-md-6 well">
+        <ul>
+            <li>is Master: {{cores.cluster.isMaster}}</li>
+            <li>is Worker: {{cores.cluster.isWorker}}</li>
+            <li>Scheduling Policy: {{cores.cluster.schedulingPolicy}}</li>
+            <li>Free Memory: {{cores.freeMem/1000 | number:0}}</li>
+            <li>Total Memory: {{cores.totalMem/1000| number:0}}</li>
+            <li>Heap Total: {{cores.processMem.heapTotal/1000 | number:0}}</li>
+            <li>Heap Used: {{cores.processMem.heapUsed/1000 | number:0}}</li>
+            <li>Heap Available: {{(cores.processMem.heapTotal - cores.processMem.heapUsed)/1000 | number:0}}</li>
+        </ul>
+    </div>
+    <div class="col-md-6 well">
+        <h5>Sockets:</h5>
+        <ul>
+            <li>Connections: {{cores.server}}</li>
+            <li>Latency: {{latency}}</li>
+
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

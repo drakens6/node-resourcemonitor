@@ -1,0 +1,121 @@
+
+<html lang="en" ng-app='app' >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="charts/angular-chart.min.css">
+
+    <title>NodeJS Profiler</title>
+</head>
+<body>
+<div class='container' ng-controller='profilerCtrl'>
+
+{% raw %}
+<div class='row' style='padding-top:10px;'>
+    <div class='panel panel-default col-md-12' style='padding-left:0px;padding-right:0px;'>
+        <div class="panel-heading">
+    <h3 class="panel-title" >Node Profiler</h3>
+    </div>
+        <div class='panel-body'>
+            <div class='row'>
+                <div class='col-md-12'></div>
+                <p class='text-center'>
+                    Master: {{cores.cluster.isMaster}} | Worker: {{cores.cluster.isWorker}} | Scheduling Policy: {{cores.cluster.schedulingPolicy}}</p>
+                <div class="col-md-6" >
+                    <table class="table table-hover table-bordered" style='font-size:12px;'>
+                        <thead>
+                        <th>CPU name</th>
+                        <th>Speed</th>
+                        <th>Idle</th>
+                        <th>Sys</th>
+                        <th>user</th>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="c in cores.cpu">
+                            <td>{{c.model}}</td>
+                            <td>{{c.speed}}</td>
+                            <td>{{c.times.idle/1000 | number:0}}</td>
+                            <td>{{c.times.sys/1000 | number:0}}</td>
+                            <td>{{c.times.user/1000 | number:0}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    Sockets - Connections: {{cores.server}} | Latency: {{latency}}
+                </div>
+                <div class='col-md-6'>  
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#idle" role="tab" data-toggle="tab" ng-click='tab($event)'>Idle</a></li>
+                        <li><a href="#user" role="tab" data-toggle="tab" ng-click='tab($event)'>User</a></li>
+                        <li><a href="#sys" role="tab" data-toggle="tab" ng-click='tab($event)'>Sys</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="idle">
+                            <canvas id="cpuChart_idle" class="chart chart-line" chart-data="cpuData_idle"
+                              chart-labels="cpuLabels_idle" chart-legend="true" chart-series="cpuSeries_idle"
+                              chart-click="cpuOnClick_idle" chart-options="{animation: false, datasetFill : false, pointDot: false, scaleShowGridLines: false}">
+                            </canvas>
+                        </div>
+                        <div class="tab-pane" id="user">
+                            <canvas id="cpuChart_user" class="chart chart-line" chart-data="cpuData_user"
+                            chart-labels="cpuLabels_user" chart-legend="true" chart-series="cpuSeries_user"
+                            chart-click="cpuOnClick_user" chart-options="{animation: false, datasetFill : false, pointDot: false, scaleShowGridLines: false}">
+                            </canvas>
+                             
+                        </div>
+                        <div class="tab-pane" id="sys">
+                            <canvas id="cpuChart_sys" class="chart chart-line" chart-data="cpuData_sys"
+                            chart-labels="cpuLabels_sys" chart-legend="true" chart-series="cpuSeries_sys"
+                            chart-click="cpuOnClick_sys" chart-options="{animation: false, datasetFill : false, pointDot: false, scaleShowGridLines: false}">
+                             </canvas>
+                        </div>
+                    </div>
+                </div>
+            
+                </div>
+                <hr>
+        <div class='row'>
+           
+             <div class='col-md-6'>       
+                      <p class='text-center'>Free Memory: {{cores.freeMem/1000 | number:0}} | Total Memory: {{cores.totalMem/1000 | number:0}} </p>
+                            <canvas id="memChart" class="chart chart-line" chart-data="memData"
+                              chart-labels="memLabels" chart-legend="true" chart-series="memSeries"
+                              chart-click="memOnClick" chart-options="{animation: false, datasetFill : false, pointDot: false, scaleShowGridLines: false}">
+                            </canvas>
+                           
+                </div>
+                <div class='col-md-6'>
+                  <p class='text-center'>  Heap Total: {{cores.processMem.heapTotal/1000 | number:0}} | Heap Used: {{cores.processMem.heapUsed/1000 | number:0}} | Heap Available: {{(cores.processMem.heapTotal - cores.processMem.heapUsed)/1000 | number:0}} </p>
+                   <canvas id="heapChart" class="chart chart-line" chart-data="heapData"
+                              chart-labels="heapLabels" chart-legend="true" chart-series="heapSeries"
+                              chart-click="heapOnClick" chart-options="{animation: false, datasetFill : false, pointDot: false, scaleShowGridLines: false}">
+                            </canvas>
+                           
+                </div>
+          
+    
+              
+            
+                </div>
+        </div>
+    </div>
+    <div class='panel-footer'>
+            <button ng-click="getSandbox()" class="btn btn-success text-right" >Start</button>
+            <button ng-click="stopInt()" class="btn btn-danger text-right">Stop</button>
+        </div>
+</div>
+</div>
+   
+{% endraw %}
+</div>
+<script src="js/angular.min.js"></script>
+<script src="/js/ui-bootstrap-tpls-0.13.3.min.js"></script>
+<script src='/charts/Chart.min.js'></script>
+<script src='/charts/angular-chart.min.js'></script>
+<script src='../app/controllers/sandbox-controller.js'></script>
+
+</body>
+</html>
